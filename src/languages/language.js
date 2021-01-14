@@ -1,6 +1,5 @@
 import PLURALRULES from './pluralrules.json'
 import DIGITTRANSFORMTABLE from './digit-transform.json'
-import pluralRuleParser from 'cldrpluralruleparser'
 
 export default class BananaLanguage {
   constructor (locale) {
@@ -61,7 +60,8 @@ export default class BananaLanguage {
     const pluralForms = [ 'zero', 'one', 'two', 'few', 'many', 'other' ]
 
     let pluralFormIndex = 0
-
+    // eslint-disable-next-line no-undef
+    const pluralRuleParser = mw.libs.pluralRuleParser
     for (let i = 0; i < pluralForms.length; i++) {
       if (pluralRules[ pluralForms[ i ] ]) {
         if (pluralRuleParser(pluralRules[ pluralForms[ i ] ], number)) {
