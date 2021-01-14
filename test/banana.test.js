@@ -4,6 +4,14 @@ import Banana from '../src/'
 import assert from 'assert'
 import fs from 'fs'
 
+// Mock mw.libs.pluralruleparser using the equivalent npm package
+import cldrpluralruleparser from 'cldrpluralruleparser'
+global.mw = {
+  libs: {
+    pluralRuleParser: cldrpluralruleparser
+  }
+}
+
 const grammarTests = {
   bs: [{
     word: 'word',
