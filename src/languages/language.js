@@ -1,9 +1,13 @@
+import PLURALRULES from './pluralrules.json'
 import DIGITTRANSFORMTABLE from './digit-transform.json'
+import pluralRuleParser from 'cldrpluralruleparser'
 
 export default class BananaLanguage {
   constructor (locale) {
     this.locale = locale
   }
+  // CLDR plural rules generated using
+  // libs/CLDRPluralRuleParser/tools/PluralXML2JSON.html
 
   /**
    * Plural form transformations, needed for some languages.
@@ -33,7 +37,14 @@ export default class BananaLanguage {
 
     forms = forms.filter((form) => !!form)
 
-    let pluralFormIndex = this.getPluralForm(count, this.locale)
+    let pluralRules = PLURALRULES[ this.locale ]
+
+    if (!pluralRules) {
+      // default fallback.
+      return (count === 1) ? forms[ 0 ] : forms[ 1 ]
+    }
+
+    let pluralFormIndex = this.getPluralForm(count, pluralRules)
     pluralFormIndex = Math.min(pluralFormIndex, forms.length - 1)
 
     return forms[ pluralFormIndex ]
@@ -43,24 +54,24 @@ export default class BananaLanguage {
    * For the number, get the plural for index
    *
    * @param {integer} number
-   * @param {string} locale
+   * @param {Object} pluralRules
    * @return {integer} plural form index
    */
-  getPluralForm (number, locale) {
-    // Allowed forms as per CLDR spec
+  getPluralForm (number, pluralRules) {
     const pluralForms = [ 'zero', 'one', 'two', 'few', 'many', 'other' ]
-    // Create an instance of Intl PluralRules. If the locale is invalid or
-    // not supported, it fallbacks to `en`.
-    const pluralRules = new Intl.PluralRules(locale)
-    // For a locale, find the plural categories
-    const pluralCategories = pluralRules.resolvedOptions().pluralCategories
-    // Get the plural form. `select` method return values are like 'one', 'few' etc.
-    const form = pluralRules.select(number)
-    // The index of form we need to return is the index in pluralCategories.
-    // And the index should be based on the order defined in pluralForms above.
-    // So we need make sure pluralCategories follow same order as in pluralForms.
-    // For that, get an intersection of pluralForms and pluralCategories.
-    const pluralFormIndex = pluralForms.filter(f => pluralCategories.includes(f)).indexOf(form)
+
+    let pluralFormIndex = 0
+
+    for (let i = 0; i < pluralForms.length; i++) {
+      if (pluralRules[ pluralForms[ i ] ]) {
+        if (pluralRuleParser(pluralRules[ pluralForms[ i ] ], number)) {
+          return pluralFormIndex
+        }
+
+        pluralFormIndex++
+      }
+    }
+
     return pluralFormIndex
   }
 
