@@ -306,7 +306,7 @@ describe('Banana', function () {
   it('should parse and localize to English', () => {
     let locale = 'en'
     const banana = new Banana(locale, {})
-    const messages = fs.readFileSync(`${__dirname}/i18n/${locale}.json`)
+    const messages = fs.readFileSync(`./test/i18n/${locale}.json`)
     banana.load(JSON.parse(messages), locale)
     assert.strictEqual(banana.i18n('msg-one'), 'One')
     assert.strictEqual(banana.i18n('msg-two', 10), '10 results')
@@ -429,7 +429,7 @@ describe('Banana', function () {
   it('should parse the plural and gender', () => {
     let locale = 'en'
     const banana = new Banana(locale, {})
-    const messages = fs.readFileSync(`${__dirname}/i18n/${locale}.json`)
+    const messages = fs.readFileSync(`./test/i18n/${locale}.json`)
     banana.load(JSON.parse(messages), locale)
     assert.strictEqual(
       banana.i18n('This message key does not exist'),
