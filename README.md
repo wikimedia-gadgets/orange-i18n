@@ -1,8 +1,24 @@
-# banana-i18n - Javascript Internationalization library
+# orange-i18n - Javascript Internationalization library
 
-[![Build Status](https://secure.travis-ci.org/wikimedia/banana-i18n.png)](http://travis-ci.org/wikimedia/banana-i18n)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/wikimedia/banana-18n/blob/master/LICENSE)
-[![npm version](https://img.shields.io/npm/v/banana-i18n.svg?style=flat)](https://www.npmjs.com/package/banana-i18n)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/wikimedia/orange-i18n/blob/master/LICENSE)
+[![npm version](https://img.shields.io/npm/v/orange-i18n.svg?style=flat)](https://www.npmjs.com/package/orange-i18n)
+
+Orange-i18n is a fork of [**banana-i18n**](https://www.npmjs.com/package/banana-i18n) intended for use in gadgets on Wikimedia sites.
+
+PATCHES:
+1. Replaced use of `Intl.PluralRules` with `mw.libs.pluralruleparser` and a pluralrules.json data file
+    - `Intl.PluralRules` is not supported in IE 11 and Safari <13, for which MediaWiki still provides Grade A support. 
+    - The JSON data file is from version 1.2 of banana-i18n which used it along with the [cldrpluralruleparser](https://www.npmjs.com/package/cldrpluralruleparser) npm package. cldrpluralruleparser is equivalent to mediawiki.libs.pluralruleparser. The former is kept as a dev dependency for mocking the latter in tests.
+2. Added support for `{{formatnum:}}` operation - this converts the default [Arabic numerals](https://en.wikipedia.org/wiki/Arabic_numerals) to locale-specific numerals
+    - The data for numerals was already present in the repo. Code for formatnum parsing is copied from mediawiki.jqueryMsg, in which this functionality is present. ([Link](https://github.com/wikimedia/mediawiki/blob/8dbcddb333435b2deb7975632ebdead29b25dd83/resources/src/mediawiki.jqueryMsg/mediawiki.jqueryMsg.js#L1445))
+    
+Originally created for [Twinkle](https://github.com/wikimedia-gadgets/twinkle-core) by @siddharthvp (SD0001). 
+
+The original README of banana-i18n follows below this line.
+
+----
+
+# banana-i18n - Javascript Internationalization library
 
 banana-i18n is a javascript internationalization library that uses "banana" format - A JSON based localization file format.
 
