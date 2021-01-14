@@ -512,12 +512,23 @@ describe('Banana', function () {
   })
 
   it('should parse formatnum', () => {
-    let locale = 'hi'
-    const banana = new Banana(locale)
+    const bananaHi = new Banana('hi')
     assert.strictEqual(
-      banana.i18n('{{formatnum:34242}}'),
+      bananaHi.i18n('{{formatnum:34242}}'),
       '३४२४२',
-      'Devanagiri numerals'
+      'Gives Devanagiri numerals with locale=hi'
+    )
+    const bananaEn = new Banana('en')
+    assert.strictEqual(
+      bananaEn.i18n('{{formatnum:34242}}'),
+      '34242',
+      'Gives Hindu–Arabic numerals with locale=en'
+    )
+    const bananaFa = new Banana('fa')
+    assert.strictEqual(
+      bananaFa.i18n('{{formatnum:42}}'),
+      '۴۲',
+      'Gives Persian numerals with locale=fa'
     )
   })
 
