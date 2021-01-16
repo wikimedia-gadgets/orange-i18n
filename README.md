@@ -11,7 +11,19 @@ PATCHES:
     - The JSON data file is from version 1.2 of banana-i18n which used it along with the [cldrpluralruleparser](https://www.npmjs.com/package/cldrpluralruleparser) npm package. cldrpluralruleparser is equivalent to mediawiki.libs.pluralruleparser. The former is kept as a dev dependency for mocking the latter in tests.
 2. Added support for `{{formatnum:}}` operation - this converts the default [Arabic numerals](https://en.wikipedia.org/wiki/Arabic_numerals) to locale-specific numerals
     - The data for numerals was already present in the repo. Code for formatnum parsing is copied from mediawiki.jqueryMsg, in which this functionality is present. ([Link](https://github.com/wikimedia/mediawiki/blob/8dbcddb333435b2deb7975632ebdead29b25dd83/resources/src/mediawiki.jqueryMsg/mediawiki.jqueryMsg.js#L1445))
-    
+
+Run `npm run build` for a full build.
+
+### Custom builds
+Another build script is included that removes code not necessary for a given set of languages. This optimises the build from about 27000 bytes to just about 8000 bytes for many languages. 
+
+- ```npm run build-locale en fr hi``` gives a build that only includes code necessary for English, French and Hindi. You can specify upto 7 languages this way. 
+- The rules regarding grammar, plurality and digit transformations for other languages are omitted from the build. 
+- Be careful! Trying to set the locale to other languages will still work, however the output may be wrong in terms of plurality, grammar and digit transformations. 
+- By default, the code for detecting RTL or LTR directionality is also omitted  of as it relies on a massive regex string. Instead, everything is just assumed to be LTR. If you need to support RTL, disable this behaviour using the `--enableRTL` flag. ```npm run build-locale fa --enableRTL``` gives a build that works right for Persian language.
+
+In all cases the built code is saved to `dist/banana-i18n.js` which is the main entry point defined in `package.json`.
+
 Originally created for [Twinkle](https://github.com/wikimedia-gadgets/twinkle-core) by @siddharthvp (SD0001). 
 
 The original README of banana-i18n follows below this line.
