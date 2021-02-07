@@ -1,11 +1,11 @@
 'use strict'
 
-import Banana from '../src/'
-import assert from 'assert'
-import fs from 'fs'
+const Banana = require('..') // use entrypoint from package.json
+const assert = require('assert')
+const fs = require('fs')
 
 // Mock mw.libs.pluralruleparser using the equivalent npm package
-import cldrpluralruleparser from 'cldrpluralruleparser'
+const cldrpluralruleparser = require('cldrpluralruleparser');
 global.mw = {
   libs: {
     pluralRuleParser: cldrpluralruleparser

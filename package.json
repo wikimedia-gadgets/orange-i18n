@@ -5,7 +5,7 @@
   "main": "dist/banana-i18n.js",
   "typings": "types/index.d.ts",
   "scripts": {
-    "test": " node --experimental-vm-modules node_modules/.bin/jest test/banana.test.js",
+    "test": "jest test/banana.test.js",
     "build": "webpack",
     "build-locale": "bash scripts/compile-lang.sh"
   },
@@ -29,7 +29,6 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "jest": "^26.6.3",
-    "ts-jest": "^26.4.4",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
   }
