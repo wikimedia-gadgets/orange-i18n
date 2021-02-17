@@ -5,7 +5,8 @@ export default class Banana {
 	messageStore: BananaMessageStore;
 	finalFallback: string;
 
-	load(messsageSource: MessageSource | Messages, locale?: string): void;
+	load(messageSource: MessageSource): void;
+	load(messageSource: Messages, locale: string): void;
 	i18n(key: string, ...params: ParameterType[]): string;
 	setLocale(locale: string): void;
 	getFallbackLocales(): string[];
@@ -50,7 +51,8 @@ export class BananaEmitter {
 
 export class BananaMessageStore {
 	constructor();
-	load(messageSource: Messages | MessageSource, locale?: string): void;
+	load(messageSource: MessageSource): void;
+	load(messageSource: Messages, locale: string): void;
 	getMessage(key: string, locale: string): string;
 	hasLocale(locale: string): boolean;
 }
