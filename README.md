@@ -11,11 +11,13 @@ PATCHES:
     - The JSON data file is from version 1.2 of banana-i18n which used it along with the [cldrpluralruleparser](https://www.npmjs.com/package/cldrpluralruleparser) npm package. cldrpluralruleparser is equivalent to mediawiki.libs.pluralruleparser. The former is kept as a dev dependency for mocking the latter in tests.
 2. Added support for `{{formatnum:}}` operation - this converts the default [Arabic numerals](https://en.wikipedia.org/wiki/Arabic_numerals) to locale-specific numerals
     - The data for numerals was already present in the repo. Code for formatnum parsing is copied from mediawiki.jqueryMsg, in which this functionality is present. ([Link](https://github.com/wikimedia/mediawiki/blob/8dbcddb333435b2deb7975632ebdead29b25dd83/resources/src/mediawiki.jqueryMsg/mediawiki.jqueryMsg.js#L1445))
+3. Added support for the [mw.language.listToText](https://doc.wikimedia.org/mediawiki-core/master/js/source/mediawiki.language.html#mw-language-method-listToText) functionality (['a', 'b', 'c'] --> "a, b and c" in a language-agnostic way). This feature is available with the custom builds (see below) only.
+4. Added TypeScript type definitions.
 
 Run `npm run build` for a full build.
 
 ### Custom builds
-Another build script is included that removes code not necessary for a given set of languages. This optimises the build from about 27000 bytes to just about 8000 bytes for many languages. 
+Another build script is included that tailors a build to include only the code and data required for a given set of languages. This optimises the build from about 27000 bytes to just about 8000 bytes in many situations. 
 
 - ```npm run build-locale en fr hi``` gives a build that only includes code necessary for English, French and Hindi. You can specify upto 7 languages this way. 
 - The rules regarding grammar, plurality and digit transformations for other languages are omitted from the build. 
