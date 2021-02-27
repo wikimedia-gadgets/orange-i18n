@@ -247,6 +247,13 @@ class BananaEmitter {
     }
     return number
   }
+
+  list (nodes) {
+    if (!Array.isArray(nodes[0])) {
+      throw new Error('Expected argument of list function to be an array')
+    }
+    return this.language.listToText(nodes[0], this.locale)
+  }
 }
 
 /**

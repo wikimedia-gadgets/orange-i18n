@@ -1,0 +1,4 @@
+{
+  "@comment": "This file is not directly used, but generated for custom (language-specific) builds only via compile-lang script with the messages fetched from MediaWiki API. The three items in the array are respectively the messages 'and', word-separator and comma-separator ",
+  "en": [" and", " ", ", "]
+}

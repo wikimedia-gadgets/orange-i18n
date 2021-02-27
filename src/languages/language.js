@@ -1,5 +1,6 @@
 import PLURALRULES from './pluralrules.json'
 import DIGITTRANSFORMTABLE from './digit-transform.json'
+import LISTMESSAGES from './list-messages.json'
 
 export default class BananaLanguage {
   constructor (locale) {
@@ -178,5 +179,26 @@ export default class BananaLanguage {
     }
 
     return DIGITTRANSFORMTABLE[ language ].split('')
+  }
+
+  listToText(list, language) {
+    if (!LISTMESSAGES[language]) {
+      throw new Error("Messages for listToText missing!")
+    }
+    const msg = {
+      'and': LISTMESSAGES[language][0],
+      'word-separator': LISTMESSAGES[language][1],
+      'comma-separator': LISTMESSAGES[language][2]
+    }
+    let text = ''
+    for (let i = 0; i < list.length; i++) {
+      text += list[i]
+      if (list.length - 2 === i) {
+        text += msg['and'] + msg['word-separator']
+      } else if (list.length - 1 !== i) {
+        text += msg['comma-separator']
+      }
+    }
+    return text;
   }
 }

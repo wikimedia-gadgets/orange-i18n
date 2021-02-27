@@ -82,3 +82,31 @@ if (!args.enableRTL) {
     )
   fs.writeFileSync(file, emitterJS)
 }
+
+// Get data for listToText
+console.log('fetching messages from mediawiki for listToText ...')
+const { mwn } = require("mwn");
+const api = new mwn({
+  // it doesn't matter which wiki we query from, they'll all yield the same messages
+  apiUrl: 'https://www.mediawiki.org/w/api.php',
+  silent: true
+});
+
+let listMessages = {};
+api.batchOperation(langs, (lang) => {
+  return api.request({
+    "action": "query",
+    "format": "json",
+    "meta": "allmessages",
+    "formatversion": "2",
+    "ammessages": ["and", "word-separator", "comma-separator"], // order here matters!
+    "amlang": lang
+  }).then(json => {
+    listMessages[lang] = json.query.allmessages.map(msg => msg.content);
+  })
+}, 10).then(() => {
+
+  fs.writeFile(pathPrefix + '/list-messages.json',
+      JSON.stringify(listMessages, null, 4),
+      err => err && console.log(err))
+})
