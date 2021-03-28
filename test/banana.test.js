@@ -658,6 +658,32 @@ describe('Banana', function () {
     )
   })
 
+  it('should support custom parser hooks', () => {
+    const banana = new Banana('en')
+    banana.registerParserPlugin('foobar', nodes => {
+      return nodes[0] === 'foo' ? nodes[1] : nodes[2]
+    })
+    assert.strictEqual(
+        banana.i18n('surrounding {{formatnum:4323}} text {{foobar:foo|first|second}}'),
+        'surrounding 4323 text first'
+    )
+    assert.strictEqual(
+        banana.i18n('surrounding text {{foobar:$1|first|second}}', 'foo'),
+        'surrounding text first'
+    )
+    assert.strictEqual(
+        banana.i18n('surrounding text {{foobar:bar|first|second}}'),
+        'surrounding text second'
+    )
+    banana.registerParserPlugin('sysop', nodes => {
+      return nodes[1]
+    })
+    assert.strictEqual(
+        banana.i18n('surrounding text {{sysop:_|first|second}}'),
+        'surrounding text first'
+    );
+  });
+
   it('should skip wiki links if disabled', () => {
     const banana = new Banana('en', { wikilinks: false })
     banana.load({
