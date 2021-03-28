@@ -11,6 +11,7 @@ export default class Banana {
 	setLocale(locale: string): void;
 	getFallbackLocales(): string[];
 	getMessage(messageKey: string): string;
+	registerParserPlugin(name: string, plugin: Function)
 }
 
 export interface BananaOptions {
