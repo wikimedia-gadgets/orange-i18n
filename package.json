@@ -5,8 +5,11 @@
   "main": "dist/banana-i18n.js",
   "typings": "types/index.d.ts",
   "scripts": {
-    "test": "jest test/banana.test.js",
-    "build": "webpack",
+    "test:unit": "mocha",
+    "test": "npm run lint && npm run test:unit",
+    "lint": "eslint src test",
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
     "build-locale": "bash scripts/compile-lang.sh"
   },
   "keywords": [
@@ -21,16 +24,22 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^17.1.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^11.2.0",
     "cldrpluralruleparser": "^1.3.2",
+    "esbuild": "^0.8.55",
     "eslint": "^5.16.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "jest": "^26.6.3",
+    "esm": "^3.2.25",
+    "mocha": "^8.3.0",
     "mwn": "^0.10.1",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
+    "rollup": "^2.40.0",
+    "rollup-plugin-esbuild": "^2.6.1",
+    "typescript": "^4.2.3"
   }
 }

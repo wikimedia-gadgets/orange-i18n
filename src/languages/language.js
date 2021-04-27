@@ -181,9 +181,9 @@ export default class BananaLanguage {
     return DIGITTRANSFORMTABLE[ language ].split('')
   }
 
-  listToText(list, language) {
+  listToText (list, language) {
     if (!LISTMESSAGES[language]) {
-      throw new Error("Messages for listToText missing!")
+      throw new Error('Messages for listToText missing!')
     }
     const msg = {
       'and': LISTMESSAGES[language][0],
@@ -199,6 +199,6 @@ export default class BananaLanguage {
         text += msg['comma-separator']
       }
     }
-    return text;
+    return text
   }
 }

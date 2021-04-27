@@ -1,11 +1,11 @@
 'use strict'
 
-const Banana = require('..') // use entrypoint from package.json
-const assert = require('assert')
-const fs = require('fs')
+import Banana from '../src'
+import assert from 'assert'
+import fs from 'fs'
 
 // Mock mw.libs.pluralruleparser using the equivalent npm package
-const cldrpluralruleparser = require('cldrpluralruleparser');
+const cldrpluralruleparser = require('cldrpluralruleparser')
 global.mw = {
   libs: {
     pluralRuleParser: cldrpluralruleparser
@@ -535,8 +535,8 @@ describe('Banana', function () {
   it('should parse list', () => {
     const banana = new Banana('en')
     assert.strictEqual(
-        banana.i18n("this is list {{list:$1}}", ['a', 'b', 'c', 'd']),
-        "this is list a, b, c and d"
+      banana.i18n('this is list {{list:$1}}', ['a', 'b', 'c', 'd']),
+      'this is list a, b, c and d'
     )
   })
 
@@ -664,25 +664,25 @@ describe('Banana', function () {
       return nodes[0] === 'foo' ? nodes[1] : nodes[2]
     })
     assert.strictEqual(
-        banana.i18n('surrounding {{formatnum:4323}} text {{foobar:foo|first|second}}'),
-        'surrounding 4323 text first'
+      banana.i18n('surrounding {{formatnum:4323}} text {{foobar:foo|first|second}}'),
+      'surrounding 4323 text first'
     )
     assert.strictEqual(
-        banana.i18n('surrounding text {{foobar:$1|first|second}}', 'foo'),
-        'surrounding text first'
+      banana.i18n('surrounding text {{foobar:$1|first|second}}', 'foo'),
+      'surrounding text first'
     )
     assert.strictEqual(
-        banana.i18n('surrounding text {{foobar:bar|first|second}}'),
-        'surrounding text second'
+      banana.i18n('surrounding text {{foobar:bar|first|second}}'),
+      'surrounding text second'
     )
     banana.registerParserPlugin('sysop', nodes => {
       return nodes[1]
     })
     assert.strictEqual(
-        banana.i18n('surrounding text {{sysop:_|first|second}}'),
-        'surrounding text first'
-    );
-  });
+      banana.i18n('surrounding text {{sysop:_|first|second}}'),
+      'surrounding text first'
+    )
+  })
 
   it('should skip wiki links if disabled', () => {
     const banana = new Banana('en', { wikilinks: false })
