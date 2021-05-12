@@ -10,8 +10,8 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo 'Invoking webpack ...'
-webpack --config webpack.config.js --entry ./src-working/index.js
+echo 'Invoking rollup ...'
+rollup -c rollup.config.js -i src-working/index.js
 
 echo "Removing src-working"
 rm -r src-working

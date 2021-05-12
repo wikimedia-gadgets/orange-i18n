@@ -8,7 +8,7 @@
     "test:unit": "mocha",
     "test": "npm run lint && npm run test:unit",
     "lint": "eslint src test",
-    "build": "rollup -c",
+    "build": "webpack",
     "dev": "rollup -c -w",
     "build-locale": "bash scripts/compile-lang.sh"
   },
@@ -37,9 +37,11 @@
     "eslint-plugin-standard": "^4.0.1",
     "esm": "^3.2.25",
     "mocha": "^8.3.0",
-    "mwn": "^0.10.1",
+    "mwn": "^0.10.4",
     "rollup": "^2.40.0",
     "rollup-plugin-esbuild": "^2.6.1",
-    "typescript": "^4.2.3"
+	"typescript": "^4.2.3",
+    "webpack": "^5.37.0",
+    "webpack-cli": "^4.7.0"
   }
 }
