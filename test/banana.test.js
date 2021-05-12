@@ -532,14 +532,6 @@ describe('Banana', function () {
     )
   })
 
-  it('should parse list', () => {
-    const banana = new Banana('en')
-    assert.strictEqual(
-      banana.i18n('this is list {{list:$1}}', ['a', 'b', 'c', 'd']),
-      'this is list a, b, c and d'
-    )
-  })
-
   it('should parse the Arabic message', () => {
     const locale = 'ar'
     const banana = new Banana(locale)

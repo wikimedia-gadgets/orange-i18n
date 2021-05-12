@@ -1,6 +1,6 @@
 {
   "name": "orange-i18n",
-  "version": "1.5.0",
+  "version": "2.0.0",
   "description": "Banana Internationalization library",
   "main": "dist/banana-i18n.js",
   "typings": "types/index.d.ts",

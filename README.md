@@ -5,16 +5,20 @@
 
 Orange-i18n is a fork of [**banana-i18n**](https://www.npmjs.com/package/banana-i18n) intended for use in gadgets on Wikimedia sites.
 
+Some of the changes done in this fork have been merged upstream. The only significant change here now is the use of MW plural rules rather than `Intl` based ones.
+
 PATCHES:
 1. Replaced use of `Intl.PluralRules` with `mw.libs.pluralruleparser` and a pluralrules.json data file
     - `Intl.PluralRules` is not supported in IE 11 and Safari <13, for which MediaWiki still provides Grade A support. 
     - The JSON data file is from version 1.2 of banana-i18n which used it along with the [cldrpluralruleparser](https://www.npmjs.com/package/cldrpluralruleparser) npm package. cldrpluralruleparser is equivalent to mediawiki.libs.pluralruleparser. The former is kept as a dev dependency for mocking the latter in tests.
 2. Added support for `{{formatnum:}}` operation - this converts the default [Arabic numerals](https://en.wikipedia.org/wiki/Arabic_numerals) to locale-specific numerals
     - The data for numerals was already present in the repo. Code for formatnum parsing is copied from mediawiki.jqueryMsg, in which this functionality is present. ([Link](https://github.com/wikimedia/mediawiki/blob/8dbcddb333435b2deb7975632ebdead29b25dd83/resources/src/mediawiki.jqueryMsg/mediawiki.jqueryMsg.js#L1445))
-    - UPDATE: merged upstream in https://github.com/wikimedia/banana-i18n/pull/43
-3. Added support for `{{list:}}` operation which provides [mw.language.listToText](https://doc.wikimedia.org/mediawiki-core/master/js/source/mediawiki.language.html#mw-language-method-listToText) functionality (['a', 'b', 'c'] —> "a, b and c" in a language-agnostic way). This feature is available with the custom builds (see below) only.
-   - This needs the knowledge of how different languages separate words – this can be done using the MediaWiki i18n messages `word-separator`, `comma-separator` and `and` which we fetch using the MediaWiki API at the build step. 
-4. (366319eb) Added support for custom parser hooks. Mostly intended for cases where the hook relies on data that is not available with orange-i18n but is present in the client script. 
+    - MERGED UPSTREAM in https://github.com/wikimedia/banana-i18n/pull/43
+3. ~~Added support for `{{list:}}` operation which provides [mw.language.listToText](https://doc.wikimedia.org/mediawiki-core/master/js/source/mediawiki.language.html#mw-language-method-listToText) functionality (['a', 'b', 'c'] —> "a, b and c" in a language-agnostic way). This feature is available with the custom builds (see below) only.~~
+   - ~~This needs the knowledge of how different languages separate words – this can be done using the MediaWiki i18n messages `word-separator`, `comma-separator` and `and` which we fetch using the MediaWiki API at the build step.~~
+      - Reverted. Now that custom parser hooks are supported, this can instead be implemented as a parser hook.
+4. (366319eb) Added support for custom parser hooks. Mostly intended for cases where the hook relies on data that is not available with orange-i18n but is present in the client script.
+   - MERGED UPSTREAM in https://github.com/wikimedia/banana-i18n/pull/46
 5. Added TypeScript type definitions.
 
 Run `npm run build` for a full build.
