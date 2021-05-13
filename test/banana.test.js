@@ -696,11 +696,13 @@ describe('Banana', function () {
     grammarTest(langCode, grammarTests[langCode])
   }
 
-  it('should localize the messages with bidi arguments', () => {
-    const fallbacks = new Banana('uk').getFallbackLocales()
+  it('should work with fallback locales', () => {
+    const banana = new Banana('zh-tw')
+    banana.setFallbackLocales(['zh-hant', 'zh-hans'])
+    const fallbacks = banana.getFallbackLocales()
     assert.deepStrictEqual(
       fallbacks,
-      ['ru', 'en'],
+      ['zh-hant', 'zh-hans', 'en'],
       'Correct fallback locales'
     )
   })

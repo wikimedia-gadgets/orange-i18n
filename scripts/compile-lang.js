@@ -8,21 +8,14 @@ const minimist = require('minimist')
 
 const args = minimist(process.argv.slice(2))
 
-const inputLangs = args._
-console.log('Input langs: ' + inputLangs.join(', '))
+const langs = args._
+console.log('Input langs: ' + langs.join(', '))
 
 const pathPrefix = './src-working/languages'
 
 let origConfig = {
-  fallbacks: JSON.parse(fs.readFileSync(pathPrefix + '/fallbacks.json').toString()),
   digitTransform: JSON.parse(fs.readFileSync(pathPrefix + '/digit-transform.json').toString()),
   pluralRules: JSON.parse(fs.readFileSync(pathPrefix + '/pluralrules.json').toString())
-}
-
-let langs = []
-
-for (let lang of inputLangs) {
-  langs = langs.concat(lang, origConfig.fallbacks[lang] || [])
 }
 
 console.log('Input langs with their fallbacks: ' + langs.join(', '))
@@ -38,7 +31,6 @@ function getRelevantEntries (config) {
 }
 
 let newConfig = {
-  fallbacks: getRelevantEntries(origConfig.fallbacks),
   digitTransform: getRelevantEntries(origConfig.digitTransform),
   pluralRules: getRelevantEntries(origConfig.pluralRules)
 }
@@ -46,7 +38,6 @@ let newConfig = {
 console.log('Processed new config:')
 console.log(newConfig)
 
-fs.writeFileSync(pathPrefix + '/fallbacks.json', JSON.stringify(newConfig.fallbacks))
 fs.writeFileSync(pathPrefix + '/digit-transform.json', JSON.stringify(newConfig.digitTransform))
 fs.writeFileSync(pathPrefix + '/pluralrules.json', JSON.stringify(newConfig.pluralRules))
 

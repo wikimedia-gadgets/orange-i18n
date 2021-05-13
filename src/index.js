@@ -1,7 +1,6 @@
 import BananaParser from './parser'
 import BananaMessageStore from './messagestore'
 import BananaEmitter from './emitter'
-import fallbacks from './languages/fallbacks.json'
 
 export default class Banana {
   /**
@@ -20,6 +19,7 @@ export default class Banana {
     if (messages) {
       this.load(messages, this.locale)
     }
+    this.fallbackLocales = []
     this.finalFallback = finalFallback
   }
 
@@ -44,13 +44,17 @@ export default class Banana {
   }
 
   getFallbackLocales () {
-    return [...(fallbacks[this.locale] || []), this.finalFallback]
+    return [...this.fallbackLocales, this.finalFallback]
+  }
+
+  setFallbackLocales (locales) {
+    this.fallbackLocales = locales
   }
 
   getMessage (messageKey) {
     let locale = this.locale
     let fallbackIndex = 0
-    const fallbackLocales = this.getFallbackLocales(this.locale)
+    const fallbackLocales = this.getFallbackLocales()
     while (locale) {
       // Iterate through locales starting at most-specific until
       // localization is found. As in fi-Latn-FI, fi-Latn and fi.

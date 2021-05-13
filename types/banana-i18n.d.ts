@@ -22,6 +22,7 @@ export interface Banana {
 	i18n( key: string, ...params: ParameterType[] ): string;
 	setLocale( locale: string ): void;
 	getFallbackLocales(): string[];
+	setFallbackLocales( locales: string[] ): void;
 	getMessage( messageKey: string ): string;
 	registerParserPlugin( name: string, plugin: ((nodes: ParameterType[]) => string) ): void;
 }
