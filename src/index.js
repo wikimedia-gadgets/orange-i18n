@@ -9,13 +9,12 @@ export default class Banana {
    * @param {Object} options options
    * @param {string} [options.finalFallback] Final fallback locale
    * @param {Object|undefined} [options.messages] messages
-   * @param {boolean} [options.wikilinks] whether the wiki style link syntax should be parsed or not
    */
   constructor (locale, {
-    finalFallback = 'en', messages = undefined, wikilinks = false } = {}
+    finalFallback = 'en', messages = undefined } = {}
   ) {
     this.locale = locale
-    this.parser = new BananaParser(this.locale, { wikilinks })
+    this.parser = new BananaParser(this.locale)
     this.messageStore = new BananaMessageStore()
     if (messages) {
       this.load(messages, this.locale)
