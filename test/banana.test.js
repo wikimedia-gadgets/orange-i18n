@@ -350,6 +350,35 @@ describe('Banana', function () {
     assert.strictEqual(banana.i18n('message_2'), 'Message two', 'Fallbacks to en message by first checking ru.')
   })
 
+  it('should respect fallbacks and final fallback', () => {
+    const banana = new Banana('zh-tw')
+    banana.load({
+      'zh-tw': {
+        message_1: 'msg-1-zh-tw',
+        message_2: 'msg-2-zh-tw'
+      },
+      'zh-hant': {
+        message_2: 'msg-2-zh-hant',
+        message_4: 'msg-4-zh-hant'
+      },
+      'zh-hans': {
+        message_1: 'msg-1-zh-hans',
+        message_2: 'msg-2-zh-hans',
+        message_3: 'msg-3-zh-hans'
+      },
+      en: {
+        message_2: 'msg-2-en',
+        message_5: 'msg-5-en'
+      }
+    })
+    banana.setFallbackLocales(['zh-hant', 'zh-hans'])
+    assert.strictEqual(banana.i18n('message_1'), 'msg-1-zh-tw')
+    assert.strictEqual(banana.i18n('message_2'), 'msg-2-zh-tw')
+    assert.strictEqual(banana.i18n('message_3'), 'msg-3-zh-hans')
+    assert.strictEqual(banana.i18n('message_4'), 'msg-4-zh-hant')
+    assert.strictEqual(banana.i18n('message_5'), 'msg-5-en')
+  })
+
   it('should respect finalFallback option', () => {
     const banana = new Banana('es', {
       messages: {
