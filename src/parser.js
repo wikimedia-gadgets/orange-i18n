@@ -2,21 +2,14 @@ import BananaEmitter from './emitter'
 import BananaMessage from './ast'
 
 export default class BananaParser {
-  /**
-   *
-   * @param {string} locale
-   * @param {Object} options options
-   * @param {boolean} [options.wikilinks] whether the wiki style link syntax should be parsed or not
-   */
-  constructor (locale, { wikilinks = false } = {}) {
+  constructor (locale) {
     this.locale = locale
-    this.wikilinks = wikilinks
     this.emitter = new BananaEmitter(this.locale)
   }
 
   parse (message, params) {
-    if (message.includes('{{') || (this.wikilinks && message.includes('['))) {
-      const ast = BananaMessage(message, { wikilinks: this.wikilinks })
+    if (message.includes('{{')) {
+      const ast = BananaMessage(message)
       return this.emitter.emit(ast, params)
     } else {
       return this.simpleParse(message, params)

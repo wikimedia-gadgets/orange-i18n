@@ -1,10 +1,8 @@
 /**
  * Abstract Syntax Tree for a localization message in 'Banana' format
  * @param {string} message
- * @param {Object} options options
- * @param {boolean} [options.wikilinks] whether the wiki style link syntax should be parsed or not
  */
-export default function BananaMessage (message, { wikilinks = false } = {}) {
+export default function BananaMessage (message) {
   let escapedOrLiteralWithoutBar,
     escapedOrRegularLiteral, templateContents, templateName,
     expression, paramExpression, result
@@ -99,13 +97,12 @@ export default function BananaMessage (message, { wikilinks = false } = {}) {
         return null
       }
 
-      pos += matches[0].length
+      pos += matches[ 0 ].length
 
-      return matches[0]
+      return matches[ 0 ]
     }
   }
 
-  const whitespace = makeRegexParser(/^\s+/)
   const pipe = makeStringParser('|')
   const colon = makeStringParser(':')
   const backslash = makeStringParser('\\')
@@ -113,11 +110,11 @@ export default function BananaMessage (message, { wikilinks = false } = {}) {
   const dollar = makeStringParser('$')
   const digits = makeRegexParser(/^\d+/)
   // A literal is any character except the special characters in the message markup
-  // Special characters are: [, ], {, }, $, \
-  // If wikilinks parsing is disabled, treat [ and ] as regular text.
-  const regularLiteral = wikilinks ? makeRegexParser(/^[^{}[\]$\\]/) : makeRegexParser(/^[^{}$\\]/)
-  const regularLiteralWithoutBar = wikilinks ? makeRegexParser(/^[^{}[\]$\\|]/) : makeRegexParser(/^[^{}$\\|]/)
-  const regularLiteralWithoutSpace = wikilinks ? makeRegexParser(/^[^{}[\]$\s]/) : makeRegexParser(/^[^{}$\s]/)
+
+  // Special characters are: {, }, $, \
+  const regularLiteral = makeRegexParser(/^[^{}$\\]/)
+  const regularLiteralWithoutBar = makeRegexParser(/^[^{}$\\|]/)
+  const regularLiteralWithoutSpace = makeRegexParser(/^[^{}$\s]/)
 
   // There is a general pattern:
   // parse a thing;
@@ -147,29 +144,19 @@ export default function BananaMessage (message, { wikilinks = false } = {}) {
   // it is not a literal in the parameter
   function literal () {
     const result = nOrMore(1, escapedOrRegularLiteral)()
-    return result === null ? null : result.join('')
-  }
 
-  const escapedOrLiteralWithoutSpace = choice([
-    escapedLiteral,
-    regularLiteralWithoutSpace
-  ])
-
-  // Used to define "literals" without spaces, in space-delimited situations
-  function literalWithoutSpace () {
-    const result = nOrMore(1, escapedOrLiteralWithoutSpace)()
     return result === null ? null : result.join('')
   }
 
   function escapedLiteral () {
     const result = sequence([backslash, anyCharacter])
 
-    return result === null ? null : result[1]
+    return result === null ? null : result[ 1 ]
   }
 
-  choice([escapedLiteral, regularLiteralWithoutSpace])
-  escapedOrLiteralWithoutBar = choice([escapedLiteral, regularLiteralWithoutBar])
-  escapedOrRegularLiteral = choice([escapedLiteral, regularLiteral])
+  choice([ escapedLiteral, regularLiteralWithoutSpace ])
+  escapedOrLiteralWithoutBar = choice([ escapedLiteral, regularLiteralWithoutBar ])
+  escapedOrRegularLiteral = choice([ escapedLiteral, regularLiteral ])
 
   function replacement () {
     const result = sequence([dollar, digits])
@@ -178,7 +165,7 @@ export default function BananaMessage (message, { wikilinks = false } = {}) {
       return null
     }
 
-    return ['REPLACE', parseInt(result[1], 10) - 1]
+    return [ 'REPLACE', parseInt(result[ 1 ], 10) - 1 ]
   }
 
   templateName = transform(
@@ -202,19 +189,19 @@ export default function BananaMessage (message, { wikilinks = false } = {}) {
 
     // use a "CONCAT" operator if there are multiple nodes,
     // otherwise return the first node, raw.
-    return expr.length > 1 ? ['CONCAT'].concat(expr) : expr[0]
+    return expr.length > 1 ? [ 'CONCAT' ].concat(expr) : expr[ 0 ]
   }
 
   function templateWithReplacement () {
     const result = sequence([templateName, colon, replacement])
 
-    return result === null ? null : [result[0], result[2]]
+    return result === null ? null : [ result[ 0 ], result[ 2 ] ]
   }
 
   function templateWithOutReplacement () {
     const result = sequence([templateName, colon, paramExpression])
 
-    return result === null ? null : [result[0], result[2]]
+    return result === null ? null : [ result[ 0 ], result[ 2 ] ]
   }
 
   templateContents = choice([
@@ -224,11 +211,11 @@ export default function BananaMessage (message, { wikilinks = false } = {}) {
         // replacement eg: {{PLURAL:$1|one car|$1 cars}}
         // or no placeholders eg:
         // {{GRAMMAR:genitive|{{SITENAME}}}
-        choice([templateWithReplacement, templateWithOutReplacement]),
+        choice([ templateWithReplacement, templateWithOutReplacement ]),
         nOrMore(0, templateParam)
       ])
 
-      return res === null ? null : res[0].concat(res[1])
+      return res === null ? null : res[ 0 ].concat(res[ 1 ])
     },
     function () {
       const res = sequence([templateName, nOrMore(0, templateParam)])
@@ -237,16 +224,12 @@ export default function BananaMessage (message, { wikilinks = false } = {}) {
         return null
       }
 
-      return [res[0]].concat(res[1])
+      return [ res[ 0 ] ].concat(res[ 1 ])
     }
   ])
 
   const openTemplate = makeStringParser('{{')
   const closeTemplate = makeStringParser('}}')
-  const openWikilink = makeStringParser('[[')
-  const closeWikilink = makeStringParser(']]')
-  const openExtlink = makeStringParser('[')
-  const closeExtlink = makeStringParser(']')
 
   /**
    * An expression in the form of {{...}}
@@ -254,99 +237,11 @@ export default function BananaMessage (message, { wikilinks = false } = {}) {
   function template () {
     const result = sequence([openTemplate, templateContents, closeTemplate])
 
-    return result === null ? null : result[1]
+    return result === null ? null : result[ 1 ]
   }
 
-  function pipedWikilink () {
-    var result = sequence([
-      nOrMore(1, paramExpression),
-      pipe,
-      nOrMore(1, expression)
-    ])
-    return result === null ? null : [
-      ['CONCAT'].concat(result[0]),
-      ['CONCAT'].concat(result[2])
-    ]
-  }
-
-  function unpipedWikilink () {
-    var result = sequence([
-      nOrMore(1, paramExpression)
-    ])
-    return result === null ? null : [
-      ['CONCAT'].concat(result[0])
-    ]
-  }
-
-  const wikilinkContents = choice([
-    pipedWikilink,
-    unpipedWikilink
-  ])
-
-  function wikilink () {
-    let result = null
-
-    const parsedResult = sequence([
-      openWikilink,
-      wikilinkContents,
-      closeWikilink
-    ])
-
-    if (parsedResult !== null) {
-      const parsedLinkContents = parsedResult[1]
-      result = ['WIKILINK'].concat(parsedLinkContents)
-    }
-
-    return result
-  }
-
-  // this extlink MUST have inner contents, e.g. [foo] not allowed; [foo bar] [foo <i>bar</i>], etc. are allowed
-  function extlink () {
-    let result = null
-
-    const parsedResult = sequence([
-      openExtlink,
-      nOrMore(1, nonWhitespaceExpression),
-      whitespace,
-      nOrMore(1, expression),
-      closeExtlink
-    ])
-
-    if (parsedResult !== null) {
-      // When the entire link target is a single parameter, we can't use CONCAT, as we allow
-      // passing fancy parameters (like a whole jQuery object or a function) to use for the
-      // link. Check only if it's a single match, since we can either do CONCAT or not for
-      // singles with the same effect.
-      const target = parsedResult[1].length === 1
-        ? parsedResult[1][0]
-        : ['CONCAT'].concat(parsedResult[1])
-      result = [
-        'EXTLINK',
-        target,
-        ['CONCAT'].concat(parsedResult[3])
-      ]
-    }
-
-    return result
-  }
-
-  const nonWhitespaceExpression = choice([
-    template,
-    replacement,
-    wikilink,
-    extlink,
-    literalWithoutSpace
-  ])
-
-  expression = choice([
-    template,
-    replacement,
-    wikilink,
-    extlink,
-    literal
-  ])
-
-  paramExpression = choice([template, replacement, literalWithoutBar])
+  expression = choice([ template, replacement, literal ])
+  paramExpression = choice([ template, replacement, literalWithoutBar ])
 
   function start () {
     const result = nOrMore(0, expression)()
@@ -355,7 +250,7 @@ export default function BananaMessage (message, { wikilinks = false } = {}) {
       return null
     }
 
-    return ['CONCAT'].concat(result)
+    return [ 'CONCAT' ].concat(result)
   }
 
   result = start()
