@@ -1,4 +1,5 @@
 import languages from './languages'
+import BananaParser from './parser'
 
 /**
  * Matches the first strong directionality codepoint:
@@ -54,7 +55,11 @@ class BananaEmitter {
         if (typeof this[operation] === 'function') {
           ret = this[operation](subnodes, replacements)
         } else {
-          throw new Error('unknown operation "' + operation + '"')
+          // they probably are just talking about wiki templates
+          // In the name of the wikitemplate, any operators like plural, grammar, etc CANNOT be used.
+          // Placeholders ($1, $2, ...) can be used
+          // All operators can be used in wikitemplate parameters.
+          ret = '{{' + new BananaParser(this.locale).simpleParse(node[0], replacements) + subnodes.map(n => '|' + n) + '}}'
         }
 
         break

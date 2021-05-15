@@ -411,6 +411,27 @@ describe('Banana', function () {
     assert.strictEqual(banana.i18n('message_2'), 'Message two')
   })
 
+  it('should not throw errors when referring to wiki-templates', () => {
+    let banana = new Banana('en')
+
+    // simple
+    assert.strictEqual(banana.i18n('{{Cleanup}}'), '{{Cleanup}}', 'simple')
+
+    // should support processing of parameters
+    assert.strictEqual(banana.i18n('{{Cleanup|count={{PLURAL:$1|$1|$1}}}}', '2'), '{{Cleanup|count=2}}', 'supports processing of parameters')
+
+    // should support template names containing placeholders
+    assert.strictEqual(banana.i18n('{{$1}}', 'Cleanup'), '{{Cleanup}}', 'supports template name being a $N')
+
+    assert.strictEqual(banana.i18n('{{$1|minor=$2}}', 'Cleanup', 'yes'), '{{Cleanup|minor=yes}}', 'complex')
+
+    assert.strictEqual(banana.i18n('{{cleanup| count =  23}}'), '{{cleanup| count =  23}}', 'preserves spacing in wikitemplates')
+    assert.strictEqual(banana.i18n('{{cleanup   |  count =  23 }}'), '{{cleanup   |  count =  23 }}', 'preserves spacing in wikitemplates')
+
+    // won't work
+    // assert.strictEqual(banana.i18n('{{{{PLURAL:$1|$1|$1}}}}', '4'), '{{4}}', 'support operations in template name')
+  })
+
   it('should throw errors on invalid locales', () => {
     assert.throws(() => {
       // eslint-disable-next-line no-new

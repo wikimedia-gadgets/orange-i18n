@@ -18,8 +18,10 @@ Some of the changes done in this fork have been merged upstream. The only signif
    - ~~This needs the knowledge of how different languages separate words – this can be done using the MediaWiki i18n messages `word-separator`, `comma-separator` and `and` which we fetch using the MediaWiki API at the build step.~~
       - Reverted. Now that custom parser hooks are supported, this can instead be implemented as a parser hook.
 4. (366319eb) Added support for custom parser hooks. Mostly intended for cases where the hook relies on data that is not available with orange-i18n but is present in the client script.
-   - MERGED UPSTREAM in https://github.com/wikimedia/banana-i18n/pull/46
-5. Added TypeScript type definitions.
+    - MERGED UPSTREAM in https://github.com/wikimedia/banana-i18n/pull/46
+5. Added TypeScript type definitions.  
+    - ALSO implemented in upstream
+6. Make it easier to mention wiki-templates in messages by not throwing an error for `{{X}}` syntax where X is not a valid i18n parser operator. Such usages are rendered literally instead.
 
 #### Removed/missing features:
 Certain features are removed/missing in order to keep the library light-weight.
