@@ -40,7 +40,7 @@ export default class BananaLanguage {
 
     if (!pluralRules) {
       // default fallback.
-      return (count === 1) ? forms[ 0 ] : forms[ 1 ]
+      pluralRules = { one: 'i = 1 and v = 0' }
     }
 
     let pluralFormIndex = this.getPluralForm(count, pluralRules)

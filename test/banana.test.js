@@ -487,8 +487,6 @@ describe('Banana', function () {
   it('should parse the plural and gender', () => {
     let locale = 'en'
     const banana = new Banana(locale, {})
-    const messages = fs.readFileSync(`./test/i18n/${locale}.json`)
-    banana.load(JSON.parse(messages), locale)
     assert.strictEqual(
       banana.i18n('This message key does not exist'),
       'This message key does not exist',
@@ -527,7 +525,12 @@ describe('Banana', function () {
     assert.strictEqual(
       banana.i18n(pluralAndGenderMessageWithLessParaMS, 'Meera', 1, 'female'),
       'Meera has 1 kitten. She loves to play with it.',
-      'Plural and gender test - female, singular, but will less parameters in message'
+      'Plural and gender test - female, singular, but with less parameters in message'
+    )
+    assert.strictEqual(
+      banana.i18n(pluralAndGenderMessageWithLessParaMS, 'Meera', 2, 'female'),
+      'Meera has 2 kitten. She loves to play with it.',
+      'Plural and gender test - female, plural, with less parameters in message'
     )
     assert.strictEqual(
       banana.i18n(pluralAndGenderMessageWithCase, 'Meera', 1, 'female'),
