@@ -11,6 +11,7 @@ Some of the changes done in this fork have been merged upstream. The only signif
 1. Replaced use of `Intl.PluralRules` with `mw.libs.pluralruleparser` and a pluralrules.json data file
     - `Intl.PluralRules` is not supported in IE 11 and Safari <13, for which MediaWiki still provides Grade A support. 
     - The JSON data file is from version 1.2 of banana-i18n which used it along with the [cldrpluralruleparser](https://www.npmjs.com/package/cldrpluralruleparser) npm package. cldrpluralruleparser is equivalent to mediawiki.libs.pluralruleparser. The former is kept as a dev dependency for mocking the latter in tests.
+    - 2021-05-20: [Additional bugfix](https://github.com/wikimedia-gadgets/orange-i18n/commit/8d73d29b4d794c6e2f181560f7839bfe23e3853a) applied.
 2. Added support for `{{formatnum:}}` operation - this converts the default [Arabic numerals](https://en.wikipedia.org/wiki/Arabic_numerals) to locale-specific numerals
     - The data for numerals was already present in the repo. Code for formatnum parsing is copied from mediawiki.jqueryMsg, in which this functionality is present. ([Link](https://github.com/wikimedia/mediawiki/blob/8dbcddb333435b2deb7975632ebdead29b25dd83/resources/src/mediawiki.jqueryMsg/mediawiki.jqueryMsg.js#L1445))
     - MERGED UPSTREAM in https://github.com/wikimedia/banana-i18n/pull/43
