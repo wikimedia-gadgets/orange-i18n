@@ -30,8 +30,10 @@ Certain features are removed/missing in order to keep the library light-weight.
    -  Messages from untrusted sources should not be directly used as HTML, as this library does not provide runtime sanitisation of messages. Ideally, use a build step to sanitise them keeping only trusted HTML tags and attributes.
 2. Wikilink, external link syntax parsing
    - This can be implemented more appropriately in the consumer script side. Since neither this library nor its parent banana-i18n use different parsing modes like mediawiki.JQueryMsg, parsing wikilinks to `<a>` tags may not be always desirable (for example, wikilinks in edit summaries).
-3. Built-in fallback language resolution data
-   - Fallback languages need to be explicitly set using `banana.setFallbackLocales()` method, so that the list of fallback languages does not need to be present in the library code. It is suggested to use a pre-processed i18n files that contain all fallback languages messages already resolved. This saves the time and bandwidth needed to fetch multiple i18n files.
+3. No built-in data for fallback languages, plural rules, or digit transforms.
+   - Banana-i18n contains the data for fallback languages, plural rules, and digit transforms for *all* languages which bloats the bundle. In order to keep this library slim, this data is excluded and needs to be injected by the client script via `banana.setFallbackLocales`, `banana.setPluralRules` or `banana.setDigitTransforms`. This way the client script can retrieve the data only for the languages it requires.
+   - It is suggested to use pre-processed i18n files that contain all fallback languages messages already resolved. This saves the time and bandwidth needed to fetch multiple i18n files. These files can also contain the plural rules and digit transform data for the given language.
+   - Plural rules can also be taken from `Intl` object for applications that don't need IE11 support.
 
 Twinkle-core uses an [i18n build script](https://github.com/wikimedia-gadgets/twinkle-core/blob/master/scripts/build-i18n.js) for build-time message sanitisation and fallback language resolution.
 
