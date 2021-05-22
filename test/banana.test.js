@@ -576,21 +576,23 @@ describe('Banana', function () {
   })
 
   it('should parse formatnum', () => {
-    const bananaHi = new Banana('hi')
+    const banana = new Banana('hi')
+    banana.setDigitTransforms('hi', '०१२३४५६७८९')
+    banana.setDigitTransforms('fa', '۰۱۲۳۴۵۶۷۸۹')
     assert.strictEqual(
-      bananaHi.i18n('{{formatnum:34242}}'),
+      banana.i18n('{{formatnum:34242}}'),
       '३४२४२',
       'Gives Devanagiri numerals with locale=hi'
     )
-    const bananaEn = new Banana('en')
+    banana.setLocale('en')
     assert.strictEqual(
-      bananaEn.i18n('{{formatnum:34242}}'),
+      banana.i18n('{{formatnum:34242}}'),
       '34242',
       'Gives Hindu–Arabic numerals with locale=en'
     )
-    const bananaFa = new Banana('fa')
+    banana.setLocale('fa')
     assert.strictEqual(
-      bananaFa.i18n('{{formatnum:42}}'),
+      banana.i18n('{{formatnum:42}}'),
       '۴۲',
       'Gives Persian numerals with locale=fa'
     )
@@ -599,6 +601,14 @@ describe('Banana', function () {
   it('should parse the Arabic message', () => {
     const locale = 'ar'
     const banana = new Banana(locale)
+    banana.setPluralRules('ar', {
+      "zero": "n = 0",
+      "one": "n = 1",
+      "two": "n = 2",
+      "few": "n % 100 = 3..10",
+      "many": "n % 100 = 11..99"
+    })
+    banana.setDigitTransforms('ar', '٠١٢٣٤٥٦٧٨٩')
     assert.strictEqual(banana.locale, 'ar', 'Locale is Arabic')
     assert.strictEqual(banana.i18n('{{plural:$1|zero|one|two|few|many|other}}', 1), 'one',
       'Arabic plural test for one')
@@ -657,6 +667,7 @@ describe('Banana', function () {
   it('should use digit transform table and localize digits', function () {
     const langCode = 'fa'
     const banana = new Banana(langCode)
+    banana.setDigitTransforms('fa', '۰۱۲۳۴۵۶۷۸۹')
     assert.strictEqual(banana.parser.emitter.locale, langCode, 'Locale is ' + langCode)
     assert.strictEqual(banana.parser.emitter.language.convertNumber('8'), '۸',
       'Persian transform of 8')

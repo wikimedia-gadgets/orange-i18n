@@ -1,7 +1,7 @@
-import PLURALRULES from './pluralrules.json'
-import DIGITTRANSFORMTABLE from './digit-transform.json'
-
 export default class BananaLanguage {
+  static pluralRules = {}
+  static digitTransforms = {}
+
   constructor (locale) {
     this.locale = locale
   }
@@ -36,7 +36,7 @@ export default class BananaLanguage {
 
     forms = forms.filter((form) => !!form)
 
-    let pluralRules = PLURALRULES[ this.locale ]
+    let pluralRules = BananaLanguage.pluralRules[ this.locale ]
 
     if (!pluralRules) {
       // default fallback.
@@ -173,10 +173,10 @@ export default class BananaLanguage {
    * representation, or boolean false if there is no information.
    */
   digitTransformTable (language) {
-    if (!DIGITTRANSFORMTABLE[ language ]) {
+    if (!BananaLanguage.digitTransforms[ language ]) {
       return false
     }
 
-    return DIGITTRANSFORMTABLE[ language ].split('')
+    return BananaLanguage.digitTransforms[ language ].split('')
   }
 }
