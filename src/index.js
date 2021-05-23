@@ -1,7 +1,7 @@
 import BananaParser from './parser'
 import BananaMessageStore from './messagestore'
 import BananaEmitter from './emitter'
-import BananaLanguage from "./languages/language";
+import BananaLanguage from './languages/language'
 
 export default class Banana {
   /**
@@ -51,11 +51,11 @@ export default class Banana {
     this.fallbackLocales = locales
   }
 
-  setPluralRules(locale, rule) {
+  setPluralRules (locale, rule) {
     BananaLanguage.pluralRules[locale] = rule
   }
 
-  setDigitTransforms(locale, transforms) {
+  setDigitTransforms (locale, transforms) {
     BananaLanguage.digitTransforms[locale] = transforms
   }
 

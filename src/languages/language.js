@@ -1,7 +1,4 @@
 export default class BananaLanguage {
-  static pluralRules = {}
-  static digitTransforms = {}
-
   constructor (locale) {
     this.locale = locale
   }
@@ -180,3 +177,18 @@ export default class BananaLanguage {
     return BananaLanguage.digitTransforms[ language ].split('')
   }
 }
+
+/**
+ * Plural rules: keys are language codes, values are CLDR plural rules
+ * @static
+ * @type {Object}
+ */
+BananaLanguage.pluralRules = {}
+
+/**
+ * Plural rules: keys are language codes, values are 10-character string
+ * with transforms of digits form 0 to 9.
+ * @static
+ * @type {Object}
+ */
+BananaLanguage.digitTransforms = {}
