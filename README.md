@@ -37,12 +37,13 @@ Certain features are removed/missing in order to keep the library light-weight.
 
 Twinkle-core uses an [i18n build script](https://github.com/wikimedia-gadgets/twinkle-core/blob/master/scripts/build-i18n.js) for build-time message sanitisation and fallback language resolution.
 
-### Custom builds
-Another build script is included that tailors a build to include only the code and data required for a given set of languages. This optimises the build from about 27000 bytes to just about 8000 bytes in many situations. 
+### Custom builds 
+Another build script is included that tailors a build to include only the code and data required for a given set of languages. This optimises the build from about 27000 bytes to just about 8000 bytes in many situations.
+
+Note: This originally removed the plural rules, fallbacks and digit transforms as well. But now those are anyway removed for all languages (see #3 above).
 
 - ```npm run build-locale en fr hi``` gives a build that only includes code necessary for English, French and Hindi. You can specify upto 7 languages this way. 
-- The rules regarding grammar, plurality and digit transformations for other languages are omitted from the build. 
-- Be careful! Trying to set the locale to other languages will still work, however the output may be wrong in terms of plurality, grammar and digit transformations. 
+- The rules regarding grammar transformations for other languages are omitted from the build. Trying to set the locale to other languages will still work, however the output may be wrong in terms of grammar.
 - By default, the code for detecting RTL or LTR directionality is also omitted  of as it relies on a massive regex string. Instead, everything is just assumed to be LTR. If you need to support RTL, disable this behaviour using the `--enableRTL` flag. ```npm run build-locale fa --enableRTL``` gives a build that works right for Persian language.
 
 In all cases the built code is saved to `dist/banana-i18n.js` which is the main entry point defined in `package.json`.

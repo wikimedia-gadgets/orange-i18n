@@ -13,34 +13,6 @@ console.log('Input langs: ' + langs.join(', '))
 
 const pathPrefix = './src-working/languages'
 
-let origConfig = {
-  digitTransform: JSON.parse(fs.readFileSync(pathPrefix + '/digit-transform.json').toString()),
-  pluralRules: JSON.parse(fs.readFileSync(pathPrefix + '/pluralrules.json').toString())
-}
-
-console.log('Input langs with their fallbacks: ' + langs.join(', '))
-
-function getRelevantEntries (config) {
-  let newConfig = {}
-  Object.entries(config).forEach(([lang, data]) => {
-    if (langs.includes(lang)) {
-      newConfig[lang] = data
-    }
-  })
-  return newConfig
-}
-
-let newConfig = {
-  digitTransform: getRelevantEntries(origConfig.digitTransform),
-  pluralRules: getRelevantEntries(origConfig.pluralRules)
-}
-
-console.log('Processed new config:')
-console.log(newConfig)
-
-fs.writeFileSync(pathPrefix + '/digit-transform.json', JSON.stringify(newConfig.digitTransform))
-fs.writeFileSync(pathPrefix + '/pluralrules.json', JSON.stringify(newConfig.pluralRules))
-
 // Remove language-specific grammar rules
 let origCode = fs.readFileSync(pathPrefix + '/index.js').toString()
 let origCodeLines = /export default \{(.*?)\}/s
