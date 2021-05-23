@@ -23,6 +23,8 @@ export interface Banana {
 	setLocale( locale: string ): void;
 	getFallbackLocales(): string[];
 	setFallbackLocales( locales: string[] ): void;
+	setPluralRules( locale: string, rule: Record<"zero"|"one"|"two"|"few"|"many"|"other", string> ): void;
+	setDigitTransforms( locale: string, transforms: string ): void;
 	getMessage( messageKey: string ): string;
 	registerParserPlugin( name: string, plugin: ((nodes: ParameterType[]) => string) ): void;
 }
